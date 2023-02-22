@@ -103,7 +103,7 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
     const handleJoinGroup = async (groupId: string) => {
         const currentGroupRef = firebase.firestore().collection("groups").doc(groupId);
         await currentGroupRef.update({
-            groups: firebase.firestore.FieldValue.arrayUnion(props.currentUser.uid)
+            members: firebase.firestore.FieldValue.arrayUnion(props.currentUser.uid)
         });
         const currentUserRef = firebase.firestore().collection("users").doc(props.currentUser.uid);
         await currentUserRef.update({
