@@ -16,6 +16,8 @@ interface UserProps {
 
 export function Popup(props: { removePopup: any, isShowingFriends: boolean, currentUser: firebase.User }) {
 
+    const [addedFriends, setAddedFriends] = useState<string[]>([]);
+
     const [users, setUsers] = useState<UserData[]>([]);
 
     const [searchWord, setSearchWord] = useState("");
@@ -31,6 +33,7 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
         "Zebra",
         "Peder"
     ])
+    
 
     const handleSearch = async () => {
         const usersCollection = firebase.firestore().collection("users");
@@ -50,9 +53,9 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
         await currentUserRef.update({
             friends: firebase.firestore.FieldValue.arrayUnion(friendId)
         });
-        console.log("Friend added");
+        setAddedFriends((prev) => [...prev, friendId]);
+        
     };
-
     return (
         <>
             <div className="Overlay" onClick={props.removePopup} />
@@ -77,13 +80,13 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
                         }
 
                         {users.map((user) => (
-                            <div className="Friends-popup-inner">
+                            <div className="Friends-popup-inner" key={user.id}>
                                 <Friend name={user.displayName} />
-                                <div className="Add-friend-button" onClick={() => handleAddFriend(user.id)}>{props.isShowingFriends ? "Add" : "Join"}</div>
+                                <div className= "Add-friend-button" onClick={() => handleAddFriend(user.id)}>{props.isShowingFriends ? ( addedFriends.includes(user.id) ? "Added":"Add") : "Join"}</div>
                             </div>
                         ))}
                     </div>
-                </div>
+                </div>  
 
             </div>
         </>
