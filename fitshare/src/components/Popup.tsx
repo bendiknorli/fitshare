@@ -30,7 +30,7 @@ interface UserData {
     displayName: string;
 }
 
-export function Popup(props: { removePopup: any, isShowingFriends: boolean, currentUser: firebase.User }) {
+export function Popup(props: { removePopup: any, isShowingFriends: boolean, currentUser: firebase.User, friendsData: UserData[] }) {
 
     const [addedFriends, setAddedFriends] = useState<string[]>([]);
     const [classState, setClassState] = useState('Make-group');
@@ -40,6 +40,7 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
     const [searchWord, setSearchWord] = useState("");
 
     const [groups, setGroups] = useState<GroupData[]>([]);
+
 
     const fetchGroups = async () => {
         const groupCollection = firebase.firestore().collection("groups");
@@ -72,15 +73,13 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
         handleJoinGroup(newGroup.id);
         props.removePopup();
     }
-    
-
     const handleSearch = async () => {
         const usersCollection = firebase.firestore().collection("users");
         const querySnapshot = await usersCollection.where("displayName", ">=", searchWord).get();
         const mathingUsers: UserData[] = [];
         querySnapshot.forEach((doc) => {
             const user = doc.data() as UserData;
-            if (user.id !== props.currentUser.uid) {
+            if ((user.id !== props.currentUser.uid) && !props.friendsData.some((friend) => friend.id === user.id)) {
                 mathingUsers.push(user);
             }
         });
@@ -97,8 +96,7 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
         const friendRef = firebase.firestore().collection("users").doc(friendId);
         await friendRef.update({
             friends: firebase.firestore.FieldValue.arrayUnion(props.currentUser.uid)
-        });
-        props.removePopup();
+        })
         console.log("Friend added");
     };
 
@@ -152,9 +150,9 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
                                     <>
                                         {
                                             user.displayName.toLowerCase().includes(searchWord.toLowerCase()) ?
-                                                <div className="Friends-popup-inner">
+                                                <div className="Friends-popup-inner" >
                                                     <Friend name={user.displayName} />
-                                                    <div className="Add-friend-button" onClick={() => handleAddFriend(user.id)}>Add</div>
+                                                    <div className="Add-friend-button" onClick={() => handleAddFriend(user.id)}>{addedFriends.includes(user.id) ? 'Added' : 'Add'}</div>
                                                 </div>
                                                 : null
                                         }
