@@ -199,7 +199,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
       {
         isShowingFriendPopUp || isShowingGroupPopUp ? (
-          <Popup removePopup={() => { setIsShowingFriendPopUp(false); setIsShowingGroupPopUp(false) }} isShowingFriends={isShowingFriendPopUp} currentUser={currentUser} friendsData={friendsData}/>
+          <Popup removePopup={() => { setIsShowingFriendPopUp(false); setIsShowingGroupPopUp(false) }} isShowingFriends={isShowingFriendPopUp} currentUser={currentUser} friendsData = {friendsData} groupsData = {groupsData}/>
         ) : null
       }
 
