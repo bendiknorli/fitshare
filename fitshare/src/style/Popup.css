@@ -1,0 +1,120 @@
+.Popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 70%;
+    background-color: #282c34;
+    border: 2px solid whitesmoke;
+    padding: 32px;
+    border-radius: 12px;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.5;
+}
+
+.Friends-popup {
+    position: absolute;
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.Friends-popup-inner {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 70%;
+}
+
+.Popup-close-button {
+    position: absolute;
+    width: 15%;
+    height: 8%;
+    right: 10px;
+    top: 30px;
+
+}
+
+.Popup-close-button:hover {
+    color: #cec70d;
+    cursor: pointer;
+}
+
+.Popup-search-icon {
+    position: relative;
+    width: 8%;
+    height: 6%;
+    right: 12px;
+    top: 10px;
+}
+
+.Popup-search-icon:hover {
+    color: #cec70d;
+    cursor: pointer;
+}
+
+.Popup-search-icon:active {
+    color: #b3a900;
+}
+
+.Add-friend-button {
+    position: absolute;
+    width: 20%;
+    height: 50%;
+    right: 0px;
+    top: 25px;
+    background: #FFF500;
+    color: black;
+    border-radius: 100px;
+    font-weight: bold;
+}
+
+.Add-friend-button:hover {
+    background: #cec70d;
+    cursor: pointer;
+}
+
+.Make-group {
+    background: rgb(84, 193, 22);
+    width: 100%;
+    text-align: center;
+    border-radius: 90px;
+    height: 50px;
+    line-height: 45px;
+    font-weight: bold;
+}
+
+.Make-group:hover {
+    background: rgb(70, 160, 18);
+    cursor: pointer;
+}
+
+.Make-group:active {
+    background: rgb(59, 134, 16);
+}
+
+.Made-new-group {
+    background: rgb(134, 169, 114);
+    width: 100%;
+    text-align: center;
+    border-radius: 90px;
+    height: 50px;
+    line-height: 45px;
+
+}

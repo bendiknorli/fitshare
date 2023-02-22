@@ -14,8 +14,8 @@ const Main: React.FC<UserProps> = ({ currentUser }) => {
     <BrowserRouter>
       <Routes> {/* The Switch decides which component to show based on the current URL.*/}
         <Route path="/" element={<App currentUser={currentUser} />} />
-        <Route path="/programs" element={<TrainingPrograms />} />
-        <Route path="/newprogram" element={<NewProgram />} />
+        <Route path="/programs" element={<TrainingPrograms currentUser={currentUser} />} />
+        <Route path="/newprogram" element={<NewProgram currentUser={currentUser} />} />
         <Route path="/*" element={<Error404page />} />
       </Routes>
     </BrowserRouter>

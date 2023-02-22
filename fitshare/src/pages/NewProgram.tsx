@@ -1,23 +1,36 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './../NewProgram.css';
+import './../style/NewProgram.css';
 import { BiArrowBack } from 'react-icons/bi';
+import { uuidv4 } from '@firebase/util';
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import "firebase/compat/auth";
+import "firebase/compat/analytics";
 
 
-interface Excersise {
+interface Exercise {
   name: string;
   sets: number;
   reps: number;
+  id: string;
 }
 
 interface Workout {
-  id: number;
+  id: string;
   name: string;
-  exercises: Excersise[];
+  exercises: Exercise[];
+}
+
+interface Program {
+  owner: string;
+  id: string;
+  name: string;
+  workouts: String[];
 }
 
 
-export function NewProgram() {
+export function NewProgram(props: { currentUser: firebase.User }) {
 
   const navigate = useNavigate();
 
@@ -25,40 +38,39 @@ export function NewProgram() {
     navigate('/programs');
   };
 
-  const saveProgram = () => {
+  const saveProgram = async () => {
+    const newProgram: Program = {
+      owner: props.currentUser.uid,
+      id: uuidv4(),
+      name: newProgramName,
+      workouts: []
+    };
+
+
+    workouts.slice(1).forEach(element => {
+      newProgram.workouts.push(element.id);
+    });
+    const programCollection = firebase.firestore().collection("programs");
+    programCollection.doc(newProgram.id).set(newProgram);
+    const currentUserRef = firebase.firestore().collection("users").doc(props.currentUser.uid);
+    await currentUserRef.update({
+      programs: firebase.firestore.FieldValue.arrayUnion(newProgram.id)
+    });
+
+
     navigate('/programs');
   };
 
   const [workouts, setWorkouts] = useState<Workout[]>([
     {
-      id: 0,
-      name: "Workout 1",
+      id: "0",
+      name: "Your workouts",
       exercises: [
         {
-          name: "Bench Press",
-          sets: 3,
-          reps: 10,
-        },
-        {
-          name: "Squat",
-          sets: 3,
-          reps: 10,
-        },
-      ],
-    },
-    {
-      id: 1,
-      name: "Workout 2",
-      exercises: [
-        {
-          name: "Bench Press",
-          sets: 3,
-          reps: 10,
-        },
-        {
-          name: "Squat",
-          sets: 3,
-          reps: 10,
+          name: "Your exercises",
+          sets: 0,
+          reps: 0,
+          id: "1",
         },
       ],
     },
@@ -82,25 +94,30 @@ export function NewProgram() {
     }
 
     const newWorkout: Workout = {
-      id: workouts.length,
+      id: uuidv4(),
       name: newWorkoutName,
       exercises: [],
     };
+
+    const workoutCollection = firebase.firestore().collection("workout");
+    workoutCollection.doc(newWorkout.id).set(newWorkout);
 
     setWorkouts([...workouts, newWorkout]);
     setCurrentWorkout(newWorkout);
     setNewWorkoutName("");
   };
 
-  const addExercise = () => {
+
+  const addExercise = async () => {
     if (newExerciseName === "" || newExerciseSets === "" || newExerciseReps === "") {
       return;
     }
 
-    const newExercise: Excersise = {
+    const newExercise: Exercise = {
       name: newExerciseName,
       sets: parseInt(newExerciseSets),
       reps: parseInt(newExerciseReps),
+      id: uuidv4(),
     }
 
     const newWorkouts = [...workouts];
@@ -109,6 +126,13 @@ export function NewProgram() {
     if (workout) {
       workout.exercises.push(newExercise);
     }
+
+    const exerciseCollection = firebase.firestore().collection("exercise");
+    exerciseCollection.doc(newExercise.id).set(newExercise);
+    const currentWorkoutRef = firebase.firestore().collection("workout").doc(currentWorkout.id);
+    await currentWorkoutRef.update({
+      exercises: firebase.firestore.FieldValue.arrayUnion(newExercise.id)
+    });
 
     setWorkouts(newWorkouts);
     setNewExerciseName("");
@@ -130,11 +154,15 @@ export function NewProgram() {
             <div className="Add-button" onClick={addWorkout}>Add</div>
           </div>
 
-          {workouts.map((program, key) => (
-            <div key={key} className={currentWorkout.id === program.id ? "Option-selected" : "Option"}
-              onClick={() => setCurrentWorkout(program)}>
-              {program.name}
-            </div>
+          {workouts.map((workoutBut, key) => (
+            <>
+              {workoutBut != null ?
+                <div key={key} className={currentWorkout.id === workoutBut.id ? "Option-selected" : "Option"}
+                  onClick={() => setCurrentWorkout(workoutBut)}>
+                  {workoutBut.name}
+                </div> : null
+              }
+            </>
           ))}
 
         </div>
@@ -164,11 +192,14 @@ export function NewProgram() {
             <div className="Add-button" onClick={addExercise}>Add</div>
           </div>
           {currentWorkout.exercises.map((exercise, key) => (
-            <div key={key} className="Exercise-info">
-              {exercise.name}
-              <br></br>
-              {exercise.sets} sets of {exercise.reps} reps
-            </div>
+            <>{exercise != null ?
+              <div key={key} className="Exercise-info">
+                {exercise.name}
+                <br></br>
+                {exercise.sets} sets of {exercise.reps} reps
+              </div> : null
+            }
+            </>
           ))}
         </div>
       </div >
