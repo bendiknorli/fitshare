@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './../style/NewProgram.css';
 import { BiArrowBack } from 'react-icons/bi';
-import { uuidv4 } from '@firebase/util';
+import { v4 as uuidv4 } from 'uuid';
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
