@@ -65,14 +65,12 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
       likes: 0,
       liked: false,
       comments: [
-        { person: "Roger", content: "Thats crazy!" },
-        { person: "Roger", content: "No way!" },
+        { person: "Sophie", content: "You go!" },
         {
-          person: "Kenneth",
+          person: "George",
           content:
-            "That is the most crazy thing I have ever seen in my entire life! I really hope I can look just like you in the future! You are the person I dream of being in my sleep!",
+            "Cool photo!",
         },
-        { person: "Sen", content: "I want you!" },
       ],
     },
     {
