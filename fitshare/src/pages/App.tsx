@@ -214,8 +214,8 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           />
           {groupsData
             ? groupsData.map((group: any) => (
-                <Group key={group.id} name={group.name} />
-              ))
+              <Group key={group.id} name={group.name} />
+            ))
             : null}
         </div>
       </div>
@@ -224,11 +224,11 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
       <div className="Middle">
         <div className="Top-bar">{currentGroup}</div>
 
-        <div className="Post-buttons">
+        {/* <div className="Post-buttons">
           <div className="Post-button">Post Program</div>
 
           <div className="Post-button">Post Image</div>
-        </div>
+        </div> */}
 
         <div className="Group-feed">
           {posts.map((post) => (
@@ -264,8 +264,8 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           />
           {friendsData
             ? friendsData.map((friend: any) => (
-                <Friend key={friend.id} name={friend.displayName} />
-              ))
+              <Friend key={friend.id} name={friend.displayName} />
+            ))
             : null}
         </div>
       </div>

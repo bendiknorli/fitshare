@@ -46,7 +46,7 @@ export function TrainingPrograms(props: { currentUser: firebase.User }) {
   const [programs, setPrograms] = useState<Program[]>([
     {
       id: "0",
-      name: "Your programs",
+      name: "",
       workouts: []
     },
   ]);
@@ -137,13 +137,13 @@ export function TrainingPrograms(props: { currentUser: firebase.User }) {
         <div className="Overview">
           <h2>Executions</h2>
           <div className="Create-new-button" onClick={addExecution}>Add new Execution</div>
-          {workouts.map((workoutBut, key) => (
+          {/* {workouts.map((workoutBut, key) => (
             <>
               <div key={workoutBut.id} className="Option" >
                 {workoutBut.name}
               </div>
             </>
-          ))}
+          ))} */}
 
         </div>
 
