@@ -51,6 +51,11 @@
   display: block;
 }
 
+.FitSharelogo :hover {
+  cursor: pointer;
+}
+    
+
 .Groups {
   position: relative;
   width: 100%;

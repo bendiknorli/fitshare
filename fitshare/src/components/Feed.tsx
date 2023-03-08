@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth, useFirestore } from "reactfire";
+//import { useAuth, useFirestore } from "reactfire";
 import { useDocumentData, useCollectionData } from "react-firebase-hooks/firestore";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
@@ -48,12 +48,12 @@ interface Post {
 interface UserProps {
   currentUser: firebase.User;
 }
-
+/*
 const Feed: React.FC<UserProps> = ({currentUser}) => {
   const [friendsData, setFriendsData] = useState<Friend[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+}
   //const { currentUser } = useAuth();
   const currentUserRef = firebase
     .firestore()
@@ -96,7 +96,7 @@ const Feed: React.FC<UserProps> = ({currentUser}) => {
  // const [programData, setProgramData] = useState<Program[]>([]);
 const [exercisesData, setExercisesData] = useState<{ [id: string]: Exercise[] }>({});
 const [workoutsData, setWorkoutsData] = useState<{ [id: string]: Workout }>({});
-
+/*
 useEffect(() => {
   let postsUnsubscribe: firebase.Unsubscribe | undefined;
 
@@ -157,13 +157,13 @@ useEffect(() => {
                 workout.exercises.map((exerciseId) =>
                   firebase.firestore()
                     .collection("exercise")
-                    .doc(exerciseId)
+                    //.doc(exerciseId)
                     .get()
                 )
               );
 
               const workoutExercises: Exercise[] = [];
-              exerciseDocs.forEach((exerciseDoc) => {
+              /*exerciseDocs.forEach((exerciseDoc) => {
                 if (exerciseDoc.exists) {
                   const exercise = exerciseDoc.data() as Exercise;
                   workoutExercises.push(exercise);
@@ -206,7 +206,7 @@ useEffect(() => {
   if (error) {
     return <div>Error: {error}</div>;
   }*/
-  console.log("postsData", postsData);
+ /* console.log("postsData", postsData);
   //console.log("programsData", programData);
   console.log("exercisesData", exercisesData);
   console.log("workoutsData", workoutsData);
@@ -295,6 +295,9 @@ useEffect(() => {
       ))}
     </div>
   );*/
-};
+
+
+  /*
 
 export default Feed;
+*/

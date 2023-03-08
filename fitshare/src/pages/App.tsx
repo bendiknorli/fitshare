@@ -13,7 +13,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { useDocumentData, useCollectionData } from "react-firebase-hooks/firestore";
-import Feed from '../components/Feed';
+import { group } from "console";
+//import Feed from '../components/Feed';
 
 
 
@@ -83,17 +84,27 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     navigate("/programs");
   };
 
-  const [inGroupFeed, setInGroupFeed] =
-    useState<boolean>(false);
+  
+  const [currentGroup, setCurrentGroup] = useState<GroupData | null>(null);
 
+  const [inGroup,setInGroup] = useState<boolean>(false);
 
-  const handleSetCurrentPage = (group: GroupData) => {
-
+  useEffect(() => {
+  if (inGroup) {
+    setCurrentPageName("Testing");
+  } else {
+    setCurrentPageName("Homepage");
   }
+}, [inGroup, currentGroup]);
+
 
   const goToHomePage = () => {
-    setInGroupFeed(false);
-    setCurrentPageName("Homepage")
+    setInGroup(false);
+  }
+
+  const handleSetCurrentGroup = (group: GroupData) => {
+    setCurrentGroup(group);
+    setInGroup(true);
   }
 
   const [currentPageName, setCurrentPageName] = useState<string>("Homepage");
@@ -125,7 +136,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
         { person: "Roger", content: "Thats crazy!" },
         { person: "Roger", content: "No way!" },
         {
-          person: "Kenneth",
+          person: "KeFnneth",
           content:
             "That is the most crazy thing I have ever seen in my entire life! I really hope I can look just like you in the future! You are the person I dream of being in my sleep!",
         },
@@ -377,9 +388,10 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           {groupsData
             ? groupsData.map((group: GroupData) => (
               <Group key={group.id} name={group.name}
-                onClick={() => handleSetCurrentPage(group)} />
+                onClick={() => handleSetCurrentGroup(group)} />
             ))
-            : null}
+            : null
+          }
         </div>
       </div>
 
@@ -392,26 +404,8 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
           <div className="Post-button">Post Image</div>
         </div>
-
-        <div className="Group-feed">
-          <Feed currentUser={currentUser}></Feed>
-          {/*
-          {posts.map((post) => (
-            <Post
-              key={post.id}
-              id={post.id}
-              name={post.name}
-              program={post.program}
-              image={post.image}
-              likes={post.likes}
-              liked={post.liked}
-              comments={post.comments}
-              toggleLiked={toggleLiked}
-              addComment={addComment}
-            />
-          ))}
-          */}
-        </div>
+          
+        
       </div>
 
       {/* RIGHT SIDE */}
@@ -419,6 +413,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
         <div className="Programs-button" onClick={handlePrograms}>
           Programs
         </div>
+
 
         <div className="Friends">
           <strong>Friends</strong>
@@ -428,11 +423,33 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
               setIsShowingFriendPopUp(true);
             }}
           />
-          {friendsData
-            ? friendsData.map((friend: any) => (
-              <Friend key={friend.id} name={friend.displayName} />
-            ))
-            : null}
+          {inGroup ?
+          (groupsData?
+            (
+              currentGroup?.members.map((member: string) => (
+               <Friend key={member} name={member} />
+             ))
+              )
+            :
+           null)
+           :
+           friendsData?
+            (
+              friendsData.map((friend: any) => (
+               <Friend key={friend.id} name={friend.displayName} />
+             ))
+              )
+            :
+           null  
+        }
+          {friendsData?
+            (
+              friendsData.map((friend: any) => (
+               <Friend key={friend.id} name={friend.displayName} />
+             ))
+              )
+            :
+           null  }
         </div>
       </div>
 
@@ -450,18 +467,19 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
       ) : null}
 
       <div>
-        {inGroupFeed ? (
-          // Code to execute if `inGroupFeed` is true
+        {inGroup ? (
+          
           <>
-            handleSetCurrentPage()
+          {currentPageName}
           </>
         ) : (
-          // Code to execute if `inGroupFeed` is false
+      
           <>
-
+          {currentPageName}
           </>
         )}
       </div>
+      
     </div>
   );
 };
