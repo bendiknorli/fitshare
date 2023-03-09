@@ -13,8 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { useDocumentData, useCollectionData } from "react-firebase-hooks/firestore";
-import { group } from "console";
-//import Feed from '../components/Feed';
+
 
 
 
@@ -72,6 +71,8 @@ interface Post {
 }
 
 const App: React.FC<UserProps> = ({ currentUser }) => {
+
+  
   const [isShowingFriendPopUp, setIsShowingFriendPopUp] =
     useState<boolean>(false);
 
@@ -89,13 +90,47 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
   const [inGroup,setInGroup] = useState<boolean>(false);
 
+  const[membersOverhead,setMembersOverhead] = useState<string>("Friends");
+
+  const [AddFriendIcon, setAddFriendIcon] = useState<string>("Add-friend-icon");
+
+
+  // Oppdateres når inGroup eller currentGroup endres
   useEffect(() => {
+
   if (inGroup) {
-    setCurrentPageName("Testing");
+    setCurrentPageName(currentGroup?.name || "");
+    setMembersOverhead("Group members")
+    setAddFriendIcon("")
+
+    console.log(currentGroupData)
+
+    if (currentGroupData)  {
+      const membersRef = firebase
+        .firestore()
+        .collection("users")
+        .where(
+          firebase.firestore.FieldPath.documentId(),
+          "in",
+          currentGroupData?.members
+        );
+
+      membersRef.onSnapshot((querySnapshot) => {
+        const members: any = [];
+        querySnapshot.forEach((doc) => {
+          members.push(doc.data());
+        });
+        setMembersData(members);
+        console.log(members)
+      });
+
+    }
   } else {
     setCurrentPageName("Homepage");
+    setMembersOverhead("Friends")
+    setAddFriendIcon("Add-friend-icon")}
   }
-}, [inGroup, currentGroup]);
+, [inGroup,currentGroup]);
 
 
   const goToHomePage = () => {
@@ -108,6 +143,8 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
   }
 
   const [currentPageName, setCurrentPageName] = useState<string>("Homepage");
+
+  
 
   const [posts, setPosts] = useState([
     {
@@ -206,6 +243,14 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     .doc(currentUser.uid);
   const [currentUserData] = useDocumentData(currentUserRef as any);
 
+
+  // This is to get data about current group
+  const currentGroupRef = firebase
+    .firestore()
+    .collection("groups")
+    .doc(currentGroup?.id);
+  const [currentGroupData] = useDocumentData(currentGroupRef as any);
+
   useEffect(() => {
     let friendsUnsubscribe: firebase.Unsubscribe | undefined;
     let postsUnsubscribe: firebase.Unsubscribe | undefined;
@@ -262,56 +307,11 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     }
   }, [currentUserData]);
 
-  // useEffect(() => {
-  //   let friendsUnsubscribe: firebase.Unsubscribe | undefined;
-
-  //   if (currentUserData) {
-  //     if (currentUserData.friends.length > 0) {
-  //       const friendsRef = firebase.firestore().collection("users").where(
-  //         firebase.firestore.FieldPath.documentId(),
-  //         "in",
-  //         currentUserData.friends
-  //       );
-
-  //       const friendPosts: any[] = [];
-  //       const friends: any[] = [];
-  //       let numFriendsFetched = 0;
-
-  //       friendsUnsubscribe = friendsRef.onSnapshot((querySnapshot) => {
-  //         const friendsIterate: any[] = [];
-  //         querySnapshot.forEach((doc) => {
-  //           friendsIterate.push(doc.data());
-  //         });
-  //         friends.push(...friendsIterate);
-  //         console.log(friends);
-
-  //         friendsIterate.forEach((friend: any) => {
-  //           const friendPostsRef = firebase.firestore().collection("users").doc(friend.id).collection("posts");
-
-  //           friendsUnsubscribe = friendPostsRef.onSnapshot((querySnapshot) => {
-  //             querySnapshot.forEach((doc) => {
-  //               friendPosts.push(doc.data());
-  //             });
-
-  //             // Check if we have fetched all the posts for all the friends
-  //             numFriendsFetched++;
-  //             if (numFriendsFetched === friends.length) {
-  //               console.log(friendPosts);
-  //               // You can now set the `friendPosts` state here
-  //             }
-  //           });
-  //         });
-  //       });
-  //     }
-  //     return () => {
-  //       if (friendsUnsubscribe) friendsUnsubscribe();
-  //     };
-  //   }
-  // }, [currentUserData]);
 
 
   const [friendsData, setFriendsData] = useState<any>(null);
   const [groupsData, setGroupsData] = useState<any>(null);
+  const [membersData, setMembersData] = useState<any>(null);
 
 
   useEffect(() => {
@@ -335,9 +335,10 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
             friends.push(doc.data());
           });
           setFriendsData(friends);
+          console.log(friendsData)
         });
       } else {
-        setFriendsData([]);
+        setFriendsData([]); 
       }
 
       if (currentUserData.groups.length > 0) {
@@ -416,18 +417,19 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
 
         <div className="Friends">
-          <strong>Friends</strong>
+          <strong>{membersOverhead}</strong>
+          {!inGroup && (
           <AiOutlineUserAdd
-            className="Add-friend-icon"
+            className={AddFriendIcon}
             onClick={() => {
               setIsShowingFriendPopUp(true);
-            }}
-          />
+          }}
+          />)}
           {inGroup ?
-          (groupsData?
+          (membersData?
             (
-              currentGroup?.members.map((member: string) => (
-               <Friend key={member} name={member} />
+              membersData?.map((member: any) => (
+               <Friend key={member.id} name={member.displayName} />
              ))
               )
             :
@@ -442,14 +444,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
             :
            null  
         }
-          {friendsData?
-            (
-              friendsData.map((friend: any) => (
-               <Friend key={friend.id} name={friend.displayName} />
-             ))
-              )
-            :
-           null  }
+         
         </div>
       </div>
 

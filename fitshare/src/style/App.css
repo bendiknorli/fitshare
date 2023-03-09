@@ -51,7 +51,7 @@
   display: block;
 }
 
-.FitSharelogo :hover {
+.FitSharelogo:hover {
   cursor: pointer;
 }
     
