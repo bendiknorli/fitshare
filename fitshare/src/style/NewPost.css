@@ -1,0 +1,163 @@
+.New-Post {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  user-select: none;
+  align-items: center;
+}
+.Overviews {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-overflow: hidden;
+  white-space: nowrap;
+  font-size: 80%;
+}
+
+.Overview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  height: 100%;
+  line-height: 35px;
+}
+
+.Option-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.Input-field {
+  background: #484848;
+  color: whitesmoke;
+  text-indent: 10px;
+  font-size: 20px;
+
+  width: 50%;
+  height: 40px;
+  margin: 10px;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 90px;
+}
+
+.Input-field-small {
+  background: #484848;
+  color: whitesmoke;
+  text-indent: 10px;
+  font-size: 20px;
+
+  width: 20%;
+  max-width: 65px;
+  height: 40px;
+  margin: 10px;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 90px;
+}
+
+.Create-new-button {
+  width: 70%;
+  height: 40px;
+  color: whitesmoke;
+  cursor: pointer;
+  text-align: center;
+
+  background: rgb(71, 71, 71);
+  border-radius: 90px;
+}
+
+.Add-button:hover {
+  background: #00b800;
+  cursor: pointer;
+}
+
+.Add-button:active {
+  background: #008000;
+}
+
+.Option {
+  width: 70%;
+  height: 40px;
+  color: black;
+  margin-top: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff500;
+  border-radius: 90px;
+}
+
+.Option:hover {
+  background: #cec70d;
+  cursor: pointer;
+}
+
+.Option:active {
+  background: #b3a900;
+}
+
+.Option-selected {
+  width: 70%;
+  height: 40px;
+  color: black;
+  margin-top: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #fff500;
+
+  background: #a49c00;
+  border-radius: 90px;
+}
+
+.Option-selected:hover {
+  background: #999100;
+}
+
+.Option-selected:active {
+  background: #7f7700;
+}
+
+.New-post-button {
+  width: 10%;
+  height: 40px;
+  color: black;
+  margin-top: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  margin: 40px;
+  background: lightgreen;
+  border-radius: 90px;
+  line-height: 40px;
+}
+
+.New-post-button:hover {
+  background: #00b800;
+  cursor: pointer;
+}
+
+.New-post-button:active {
+  background: #008000;
+}
+textarea {
+  width: 400px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}

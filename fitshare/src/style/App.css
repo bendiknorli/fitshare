@@ -75,7 +75,7 @@
   margin-top: 20px;
 
   background-color: lightyellow;
-  border: 5px solid #FFF500;
+  border: 5px solid #fff500;
   filter: drop-shadow(-11px 15px 10px rgba(0, 0, 0, 0.25));
   border-radius: 90px;
 }
@@ -115,30 +115,19 @@
   background: #252525;
 }
 
-.Post-buttons {
-  position: relative;
-  width: 100%;
-  height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  margin-top: 20px;
-  justify-content: space-around;
-}
-
 .Post-button {
   position: relative;
   color: black;
   line-height: 75px;
   width: 40%;
   height: 80px;
-  margin-top: 60px;
+  margin-top: 40px;
   margin-bottom: 20px;
   font-weight: bold;
 
   min-width: 130px;
 
-  background: #FFF500;
+  background: #fff500;
   border-radius: 100px;
 
   filter: drop-shadow(-10px 10px 10px rgba(0, 0, 0, 0.25));
@@ -200,11 +189,19 @@
   width: 100%;
   height: auto;
   margin: 10px;
-  font-size: 28px;
+  font-size: 24px;
+}
+
+.Post-description {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 10px;
+  font-size: 20px;
 }
 
 .Workout {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .Exercise {
@@ -279,7 +276,7 @@
 
   font-weight: bold;
 
-  background: #FFF500;
+  background: #fff500;
   border-radius: 20px;
 
   filter: drop-shadow(-10px 10px 10px rgba(0, 0, 0, 0.25));
@@ -343,7 +340,7 @@
   text-overflow: ellipsis;
   display: inline-block;
 
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .Add-friend-icon {
