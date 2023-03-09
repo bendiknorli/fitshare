@@ -58,29 +58,6 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     navigate("/newpost");
   };
 
-  const handlePost = () => {
-    navigate("/newpost");
-  };
-
-
-      membersRef.onSnapshot((querySnapshot) => {
-        const members: any = [];
-        querySnapshot.forEach((doc) => {
-          members.push(doc.data());
-        });
-        setMembersData(members);
-        console.log(members)
-      });
-
-    }
-  } else {
-    setCurrentPageName("Homepage");
-    setMembersOverhead("Friends")
-    setAddFriendIcon("Add-friend-icon")}
-  }
-, [inGroup,currentGroup]);
-
-
   const goToHomePage = () => {
     setInGroup(false);
   }
@@ -93,7 +70,42 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
   const [currentPageName, setCurrentPageName] = useState<string>("Homepage");
 
   
+  const [currentGroup, setCurrentGroup] = useState<GroupData | null>(null);
+  const [inGroup, setInGroup] = useState<boolean>(false);
+  const [membersOverhead, setMembersOverhead] = useState<string>("Friends");
+  const [AddFriendIcon, setAddFriendIcon] = useState<string>("Add-friend-icon");
+  
 
+  useEffect(() => {
+    if (inGroup) {
+      setCurrentPageName(currentGroupData?.name || "");
+      setMembersOverhead("Group members");
+      setAddFriendIcon("");
+
+      if (currentGroupData) {
+        const membersRef = firebase
+          .firestore()
+          .collection("users")
+          .where(
+            firebase.firestore.FieldPath.documentId(), 
+            "in", 
+            currentGroupData.members);
+
+      membersRef.onSnapshot((querySnapshot) => {
+        const members: any = [];
+        querySnapshot.forEach((doc) => {
+          members.push(doc.data());
+        });
+        setMembersData(members);
+      });
+
+    }
+  } else {
+    setCurrentPageName("Homepage");
+    setMembersOverhead("Friends")
+    setAddFriendIcon("Add-friend-icon")}
+  }
+, [inGroup,currentGroup]);
 
   // This is to get data about currentuser's friends
   // ref to current user in users collection firebase
@@ -117,7 +129,6 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
     if (currentUserData) {
       if (currentUserData.friends.length > 0) {
-        // console.log(currentUserData.friends);
         const friendsRef = firebase
           .firestore()
           .collection("users")
@@ -126,7 +137,6 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
             "in",
             currentUserData.friends
           );
-        // console.log(friendsRef);
 
         const friendPosts: any = [];
         const friends: any = [];
@@ -138,16 +148,13 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           friends.push(...friendsIterate);
 
         });
-        console.log(friends);
 
         friends.forEach((friend: any) => {
-          console.log("HEI");
           const friendPostsRef = firebase
             .firestore()
             .collection("users")
             .doc(friend.id)
             .collection("posts");
-          console.log(friendPostsRef);
 
           postsUnsubscribe = friendPostsRef.onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -155,7 +162,6 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
             });
           });
         });
-        console.log(friendPosts);
         // setPosts([...posts, friendPosts]);
       } else {
         // setPosts([...posts]);
@@ -195,7 +201,6 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
             friends.push(doc.data());
           });
           setFriendsData(friends);
-          console.log(friendsData)
         });
       } else {
         setFriendsData([]); 
