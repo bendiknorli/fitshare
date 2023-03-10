@@ -41,7 +41,7 @@ interface Friend {
 
 const App: React.FC<UserProps> = ({ currentUser }) => {
 
-  
+
   const [isShowingFriendPopUp, setIsShowingFriendPopUp] =
     useState<boolean>(false);
 
@@ -69,12 +69,12 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
   const [currentPageName, setCurrentPageName] = useState<string>("Homepage");
 
-  
+
   const [currentGroup, setCurrentGroup] = useState<GroupData | null>(null);
   const [inGroup, setInGroup] = useState<boolean>(false);
   const [membersOverhead, setMembersOverhead] = useState<string>("Friends");
   const [AddFriendIcon, setAddFriendIcon] = useState<string>("Add-friend-icon");
-  
+
 
   useEffect(() => {
     if (inGroup) {
@@ -87,25 +87,26 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           .firestore()
           .collection("users")
           .where(
-            firebase.firestore.FieldPath.documentId(), 
-            "in", 
+            firebase.firestore.FieldPath.documentId(),
+            "in",
             currentGroupData.members);
 
-      membersRef.onSnapshot((querySnapshot) => {
-        const members: any = [];
-        querySnapshot.forEach((doc) => {
-          members.push(doc.data());
+        membersRef.onSnapshot((querySnapshot) => {
+          const members: any = [];
+          querySnapshot.forEach((doc) => {
+            members.push(doc.data());
+          });
+          setMembersData(members);
         });
-        setMembersData(members);
-      });
 
+      }
+    } else {
+      setCurrentPageName("Homepage");
+      setMembersOverhead("Friends")
+      setAddFriendIcon("Add-friend-icon")
     }
-  } else {
-    setCurrentPageName("Homepage");
-    setMembersOverhead("Friends")
-    setAddFriendIcon("Add-friend-icon")}
   }
-, [inGroup,currentGroup]);
+    , [inGroup, currentGroup]);
 
   // This is to get data about currentuser's friends
   // ref to current user in users collection firebase
@@ -203,7 +204,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           setFriendsData(friends);
         });
       } else {
-        setFriendsData([]); 
+        setFriendsData([]);
       }
 
       if (currentUserData.groups.length > 0) {
@@ -270,8 +271,8 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
         </div>
 
         <Feed currentUser={currentUser} />
-          
-        
+
+
       </div>
 
       {/* RIGHT SIDE */}
@@ -284,32 +285,32 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
         <div className="Friends">
           <strong>{membersOverhead}</strong>
           {!inGroup && (
-          <AiOutlineUserAdd
-            className={AddFriendIcon}
-            onClick={() => {
-              setIsShowingFriendPopUp(true);
-          }}
-          />)}
+            <AiOutlineUserAdd
+              className={AddFriendIcon}
+              onClick={() => {
+                setIsShowingFriendPopUp(true);
+              }}
+            />)}
           {inGroup ?
-          (membersData?
-            (
-              membersData?.map((member: any) => (
-               <Friend key={member.id} name={member.displayName} />
-             ))
+            (membersData ?
+              (
+                membersData?.map((member: any) => (
+                  <Friend key={member.id} name={member.displayName} />
+                ))
               )
+              :
+              null)
             :
-           null)
-           :
-           friendsData?
-            (
-              friendsData.map((friend: any) => (
-               <Friend key={friend.id} name={friend.displayName} />
-             ))
+            friendsData ?
+              (
+                friendsData.map((friend: any) => (
+                  <Friend key={friend.id} name={friend.displayName} />
+                ))
               )
-            :
-           null  
-        }
-         
+              :
+              null
+          }
+
         </div>
       </div>
 
@@ -328,18 +329,18 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
 
       <div>
         {inGroup ? (
-          
+
           <>
-          {currentPageName}
+            {currentPageName}
           </>
         ) : (
-      
+
           <>
-          {currentPageName}
+            {currentPageName}
           </>
         )}
       </div>
-      
+
     </div>
   );
 };
