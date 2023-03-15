@@ -7,7 +7,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import "firebase/compat/analytics";
-
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -30,8 +30,9 @@ interface UserData {
     displayName: string;
 }
 
-export function Popup(props: { removePopup: any, isShowingFriends: boolean, currentUser: firebase.User, friendsData: UserData[], groupsData: GroupData[]}) {
+export function Popup(props: { removePopup: any, isShowingFriends: boolean, currentUser: firebase.User, friendsData: UserData[], groupsData: GroupData[], currentUserData: any}) {
 
+    
     const [addedFriends, setAddedFriends] = useState<string[]>([]);
 
     const [addedGroups, setAddedGroups] = useState<string[]>([]);
@@ -62,7 +63,7 @@ export function Popup(props: { removePopup: any, isShowingFriends: boolean, curr
     const makeNewGroup = async () => {
         const groupCollection = firebase.firestore().collection("groups");
         setClassState("Made-new-group") 
-        if (searchWord == "") {
+        if (searchWord === "" || props.currentUserData.groups.length > 9) {
             setClassState("Make-group")
             return;
         }

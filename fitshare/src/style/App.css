@@ -315,7 +315,7 @@
   background: #272727;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   overflow-y: auto;
 }
 
@@ -325,9 +325,10 @@
 
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: left;
   margin-top: 20px;
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .Friend-profile-pic {
@@ -349,7 +350,7 @@
   font-weight: 400;
   font-size: 100%;
   line-height: 48px;
-  text-align: center;
+  text-align: left;
   margin-left: 10px;
 
   white-space: nowrap;
@@ -396,5 +397,20 @@
 
 .Add-group:hover {
   color: #fff700;
+  cursor: pointer;
+}
+
+.members-wrapper{
+  display: flex;
+  align: center;
+}
+
+.Remove-member{
+  margin-left: 5px;
+  margin-top: 10%;
+}
+
+.Remove-member:hover{
+  color: yellow;
   cursor: pointer;
 }

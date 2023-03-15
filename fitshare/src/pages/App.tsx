@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import {HiOutlineUserRemove} from 'react-icons/hi';
 import { useDocumentData, useCollectionData } from "react-firebase-hooks/firestore";
 import { Feed } from "../components/Feed";
 
@@ -53,7 +54,12 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     navigate("/newpost");
   };
 
+    
+    
+    
   const [currentGroup, setCurrentGroup] = useState<GroupData | null>(null);
+
+
 
   const [membersOverhead, setMembersOverhead] = useState<string>("Friends");
   const [AddFriendIcon, setAddFriendIcon] = useState<string>("Add-friend-icon");
@@ -73,6 +79,23 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     setInGroupFeed(false);
     setCurrentPageName("Homepage")
   }
+
+    
+
+    const handleRemoveMember = async (memberId: any) => {
+      const groupRef = firebase.firestore().collection("groups").doc(currentGroup?.id);
+      await groupRef.update({
+        members: firebase.firestore.FieldValue.arrayRemove(memberId),
+      });
+    
+      const memberRef = firebase.firestore().collection("users").doc(memberId);
+      await memberRef.update({
+        groups: firebase.firestore.FieldValue.arrayRemove(currentGroup?.id)
+      });
+
+    }
+
+    
 
   // This is to get data about currentuser's friends
   // ref to current user in users collection firebase
@@ -112,6 +135,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
     }
   }, [inGroupFeed, currentGroup]);
 
+  
   useEffect(() => {
     let friendsUnsubscribe: firebase.Unsubscribe | undefined;
     let groupsUnsubcribe: firebase.Unsubscribe | undefined;
@@ -222,10 +246,20 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           {
             inGroupFeed ?
               membersData
+              
                 ? membersData.map((member: any) => (
+                  <div key={member.id} className="members-wrapper">
                   <Friend key={member.id} name={member.displayName} />
+              {currentGroup?.admin === currentUser.uid && (
+                currentGroup?.admin !== member.id && (
+              <HiOutlineUserRemove
+              className="Remove-member" onClick={() => handleRemoveMember(member.id)}
+              ></HiOutlineUserRemove>
                 )
+          )}
+                  </div>  
                 )
+                ) 
                 : null
               :
 
@@ -248,6 +282,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           currentUser={currentUser}
           friendsData={friendsData}
           groupsData={groupsData}
+          currentUserData = {currentUserData}
         />
       ) : null}
 
