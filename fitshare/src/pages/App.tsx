@@ -208,7 +208,7 @@ const App: React.FC<UserProps> = ({ currentUser }) => {
           Create Post
         </div>
 
-        <Feed currentUser={currentUser} currentGroup={currentGroup} />
+        <Feed currentUser={currentUser} currentGroup={currentGroup}  />
       </div>
 
       {/* RIGHT SIDE */}

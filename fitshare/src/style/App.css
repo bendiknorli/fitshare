@@ -433,3 +433,16 @@
   /* justify-content: center; */
   color: orangered;
 }
+
+.Delete-icon {
+  position: absolute;
+  font-size: 30px;
+  top: 12px;
+  right: 70px;
+  color: rgb(200, 10, 10);
+}
+
+.Delete-icon:hover {
+  color: #ac0303;
+  cursor: pointer;
+}

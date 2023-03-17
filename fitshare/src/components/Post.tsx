@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiThumbsUp } from "react-icons/fi";
 import { AiOutlineComment } from "react-icons/ai";
+import {RiDeleteBin2Line} from "react-icons/ri";
 import 'firebase/compat/storage';
 import firebase from "firebase/compat/app";
 
@@ -21,6 +22,8 @@ interface ProgramView {
   workouts: WorkoutView[];
 }
 
+
+
 export function Post(props: {
   id: string,
   name: string,
@@ -29,8 +32,11 @@ export function Post(props: {
   image?: string,
   likes: number,
   liked: boolean,
+  isAdmin: boolean,
   comments: { person: string; content: string; }[],
-  toggleLiked: (id: string) => void, addComment: (id: string, comment: string) => void
+  toggleLiked: (id: string) => void,
+  addComment: (id: string, comment: string) => void,
+  deletePost: (id: string) => void,
 }) {
   const [userComment, setUserComment] = useState("");
 
@@ -40,9 +46,19 @@ export function Post(props: {
       style={{ fill: props.liked ? "yellow" : "" }} onClick={() => {
         props.toggleLiked(props.id)
       }} />
+      {props.isAdmin && (
+      <RiDeleteBin2Line
+      className="Delete-icon"
+      onClick={() => {
+          props.deletePost(props.id);
+    }}
+  />
+  )}
+   
     <strong>{props.name}</strong>
     <br></br>
     <div className="Post-content">
+    
       <strong>{props.program.workouts.length > 0 ? props.program.name : null}</strong>
       <p className="Post-description">{props.description}</p>
 
