@@ -38,6 +38,8 @@ export function PostPreview(props: {
   name: string;
   program?: ProgramView;
   setDescription: (description: string) => void;
+  handleImage: (image: File) => void;
+  image: string;
 }) {
 
   const [newPostDescription, setNewPostDescription] = useState<string>("");
@@ -70,6 +72,15 @@ export function PostPreview(props: {
             ))}
           </div>
         ))}
+        {props.image ? <><br></br> <img src={props.image} className="Post-image" alt="Exercise" /><br></br></> : null}
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              props.handleImage(e.target.files[0]);
+            }
+          }}
+        />
       </div>
     </div>
   );

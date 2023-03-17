@@ -1,0 +1,121 @@
+.Execution-container {
+    text-align: center;
+    width: 100%;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    user-select: none;
+    align-items: center;
+}
+
+.Back-button {
+    position: absolute;
+    width: 5%;
+    height: 5%;
+
+    min-width: 20px;
+    min-height: 20px;
+
+    left: 20px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Popup-search-icon {
+    position: relative;
+    width: 50px;
+    height: 15%;
+    right: 12px;
+    top: 10px;
+}
+
+.Popup-search-icon:hover {
+    color: #cec70d;
+    cursor: pointer;
+}
+
+.Popup-search-icon:active {
+    color: #b3a900;
+}
+
+.Log-execution-button {
+    position: relative;
+    width: 20%;
+    height: 50%;
+    background: #FFF500;
+    color: black;
+    border-radius: 100px;
+    font-weight: bold;
+}
+
+.Log-execution-button:hover {
+    background: #cec70d;
+    cursor: pointer;
+}
+
+.Exercise-popup-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Log-input {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+.Execution {
+    position: relative;
+    width: 300%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+/* .Execution-pic {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    background-color: lightyellow;
+    border: 1px solid black;
+    filter: drop-shadow(-11px 15px 10px rgba(0, 0, 0, 0.25));
+    border-radius: 90px;
+} */
+
+.Execution-name {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    flex-shrink: 0;
+    background-color: #FFF500;
+    border: 1px solid black;
+    filter: drop-shadow(-11px 15px 10px rgba(0, 0, 0, 0.25));
+    border-radius: 90px;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.Execution-name:hover {
+    background: #cec70d;
+    cursor: pointer;
+}

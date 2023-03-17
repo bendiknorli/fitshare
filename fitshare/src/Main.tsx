@@ -3,9 +3,11 @@ import App from "./pages/App";
 import NewProgram from "./pages/NewProgram";
 import NewPost from "./pages/NewPost";
 import TrainingPrograms from "./pages/TrainingPrograms";
-import Error404page from "./pages/Error404page";
+import Error404page from './pages/Error404page';
+import NewExecution from './pages/NewExecution';
 
-import firebase from "firebase/compat/app";
+import firebase from "firebase/compat/app"
+
 interface UserProps {
   currentUser: firebase.User;
 }
@@ -30,6 +32,7 @@ const Main: React.FC<UserProps> = ({ currentUser }) => {
           element={<NewPost currentUser={currentUser} />}
         />
         <Route path="/*" element={<Error404page />} />
+        <Route path="/newexecution" element={<NewExecution currentUser={currentUser} />} />
       </Routes>
     </BrowserRouter>
   );

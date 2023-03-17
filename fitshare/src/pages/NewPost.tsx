@@ -11,6 +11,7 @@ import "firebase/compat/analytics";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { PostPreview } from "./../components/PostPreview";
 import { Group } from "../components/Group";
+import 'firebase/compat/storage';
 
 interface Exercise {
   name: string;
@@ -52,6 +53,7 @@ interface Post {
   likedBy: [];
   likes: number;
   program: string;
+  image: string;
   timeStamp: firebase.firestore.Timestamp;
 }
 
@@ -94,6 +96,8 @@ export function NewPost(props: { currentUser: firebase.User }) {
       }
     });
 
+    setFile(undefined);
+
     const newPost: Post = {
       owner: props.currentUser.uid,
       id: uuidv4(),
@@ -102,6 +106,7 @@ export function NewPost(props: { currentUser: firebase.User }) {
       likedBy: [],
       likes: 0,
       program: programString,
+      image: url,
       timeStamp: firebase.firestore.Timestamp.now()
     };
 
@@ -125,6 +130,18 @@ export function NewPost(props: { currentUser: firebase.User }) {
 
     navigate('/');
   };
+
+  const [file, setFile] = useState<File>();
+  const [url, setURL] = useState("");
+
+  async function handleImage(file: File) {
+    setFile(file);
+    const path = `/images/${file?.name}`;
+    const ref = firebase.storage().ref(path);
+    await ref.put(file as File);
+    const url = await ref.getDownloadURL();
+    setURL(url);
+  }
 
   const currentUserRef = firebase
     .firestore()
@@ -293,6 +310,8 @@ export function NewPost(props: { currentUser: firebase.User }) {
             name={props.currentUser.displayName!}
             program={programViews.find((programView) => programView.id === currentProgram.id)!}
             setDescription={setDescription}
+            handleImage={handleImage}
+            image={url}
           />
         </div>
       </div>

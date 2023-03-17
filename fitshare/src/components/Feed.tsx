@@ -16,7 +16,7 @@ interface Post {
     likedBy: string[];
     owner: string;
     caption?: string;
-    image?: string;
+    image: string;
     comments: {
         person: string;
         content: string;
@@ -103,6 +103,23 @@ export function Feed(props: FeedInfo) {
             comments: post?.comments,
         });
     }
+
+    function deletePost(id: string) {
+        const newPosts = posts.filter((post) => post.id !== id);
+        setPosts(newPosts);
+      
+        // Delete post from the posts collection in Firestore
+        const postRef = firebase.firestore().collection("posts").doc(id);
+        postRef.delete();
+      
+        // Delete post from the currentGroup
+        if (props.currentGroup) {
+          const groupRef = firebase.firestore().collection("groups").doc(props.currentGroup.id);
+          groupRef.update({
+            posts: firebase.firestore.FieldValue.arrayRemove(id)
+          });
+        }
+      }
     const currentUserRef = firebase
         .firestore()
         .collection("users")
@@ -137,7 +154,18 @@ export function Feed(props: FeedInfo) {
 
                             postsUnsubscribe = postRef.onSnapshot((doc) => {
                                 const postData = doc.data();
-                                addPost(currentUserData, postData);
+
+                                const postAuthorRef = firebase
+                                    .firestore()
+                                    .collection("users")
+                                    .doc(postData?.owner);
+
+                                postAuthorRef.onSnapshot((doc) => {
+                                    const postAuthor = doc.data();
+                                    addPost(postAuthor, postData);
+
+                                });
+
                             });
                         });
                     }
@@ -219,7 +247,18 @@ export function Feed(props: FeedInfo) {
 
                                 postsUnsubscribe = postRef.onSnapshot((doc) => {
                                     const postData = doc.data();
-                                    addPost(currentUserData, postData);
+
+                                    const postAuthorRef = firebase
+                                        .firestore()
+                                        .collection("users")
+                                        .doc(postData?.owner);
+
+                                    postAuthorRef.onSnapshot((doc) => {
+                                        const postAuthor = doc.data();
+                                        addPost(postAuthor, postData);
+
+                                    });
+
                                 });
                             });
                         }
@@ -235,7 +274,7 @@ export function Feed(props: FeedInfo) {
         }
     }, [currentUserData, props.currentGroup]);
 
-    function addPost(author: firebase.firestore.DocumentData, postData?: firebase.firestore.DocumentData) {
+    function addPost(author?: firebase.firestore.DocumentData, postData?: firebase.firestore.DocumentData) {
         if (uniquePostIds.has(postData?.id)) {
             return;
         }
@@ -280,14 +319,15 @@ export function Feed(props: FeedInfo) {
 
         const newPost: Post = {
             id: postData?.id,
-            name: author.displayName,
+            name: author?.displayName,
             description: postData?.description,
             program: newPostProgram,
+            image: postData?.image,
             likes: postData?.likedBy.length,
             liked: liked,
             comments: postData?.comments,
             likedBy: postData?.likedBy,
-            owner: author.uid,
+            owner: author?.uid,
             timeStamp: postData?.timeStamp,
         };
 
@@ -312,9 +352,11 @@ export function Feed(props: FeedInfo) {
                     image={post.image}
                     likes={post.likes}
                     liked={post.liked}
+                    isAdmin={props.currentGroup?.admin === props.currentUser.uid}
                     comments={post.comments}
                     toggleLiked={toggleLiked}
                     addComment={addComment}
+                    deletePost = {deletePost}
                 />
             ))}
     </div>;

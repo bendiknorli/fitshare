@@ -14,6 +14,7 @@ interface Exercise {
   sets: number;
   reps: number;
   id: string;
+  owner: string;
 }
 
 interface Workout {
@@ -71,6 +72,7 @@ export function NewProgram(props: { currentUser: firebase.User }) {
           sets: 0,
           reps: 0,
           id: "1",
+          owner: props.currentUser.uid,
         },
       ],
     },
@@ -118,6 +120,7 @@ export function NewProgram(props: { currentUser: firebase.User }) {
       sets: parseInt(newExerciseSets),
       reps: parseInt(newExerciseReps),
       id: uuidv4(),
+      owner: props.currentUser.uid,
     }
 
     const newWorkouts = [...workouts];

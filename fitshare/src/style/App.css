@@ -275,7 +275,7 @@
   width: 25%;
   height: 100%;
   right: 0px;
-  top: 0px;
+  top: -10px;
   background: #272727;
   display: flex;
   flex-direction: column;
@@ -288,7 +288,7 @@
   line-height: 75px;
   width: 80%;
   height: 80px;
-  margin-top: 50px;
+  margin-top: 35px;
   margin-bottom: 20px;
 
   font-weight: bold;
@@ -400,6 +400,7 @@
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 .members-wrapper{
   display: flex;
   align: center;
@@ -412,5 +413,52 @@
 
 .Remove-member:hover{
   color: yellow;
+=======
+.Streak-box {
+  position: relative;
+  width: 100px;
+  height: 60px;
+  right: 0px;
+  top: 20px;
+  background: #272727;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.StreakCount {
+  /* position: relative; */
+  font-size: 40px;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  color: yellow;
+}
+
+.Streak-icon {
+  /* position: relative; */
+  width: 50px;
+  height: 50px;
+  /* font-size: 40px; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  color: orangered;
+}
+
+.Delete-icon {
+  position: absolute;
+  font-size: 30px;
+  top: 12px;
+  right: 70px;
+  color: rgb(200, 10, 10);
+}
+
+.Delete-icon:hover {
+  color: #ac0303;
+>>>>>>> a8710def177fffce42c64b3d3400530df23a9fb1
   cursor: pointer;
 }

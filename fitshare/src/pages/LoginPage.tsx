@@ -42,9 +42,12 @@ const LoginPage: React.FC = () => {
         programs: [],
         posts: [],
         groups: [],
-
+        streakCount: 0,
       };
       await currentUserDoc.set(userData);
+    } else {
+      // current user exists, check if they have logged today
+      onUserLogin(user as firebase.User);
     }
   };
 
@@ -53,7 +56,36 @@ const LoginPage: React.FC = () => {
       checkUserExists();
     }
   }, [user]);
-  
+
+
+  const onUserLogin = (async (user: firebase.User) => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    const userId = user.uid;
+
+    const executions = await firebase.firestore().collection('execution').where('owner', '==', userId).get();
+
+    let hasLoggedToday = false;
+    let hasLoggedYesterday = false;
+    executions.forEach((executionDoc) => {
+      const execution = executionDoc.data();
+      const executionDate = execution.date.toDate();
+      if (executionDate.toDateString() === today.toDateString()) {
+        hasLoggedToday = true;
+      }
+      else if (executionDate.toDateString() === yesterday.toDateString()) {
+        hasLoggedYesterday = true;
+      }
+    });
+
+    if (!hasLoggedToday && !hasLoggedYesterday) {
+      await firebase.firestore().collection('users').doc(userId).update({ streakCount: 0 });
+    }
+  });
+
+
+
   return (
     <div className="LoginPage">
       <section>{user ? <Main currentUser={user as firebase.User} /> : <SignIn />}</section>
